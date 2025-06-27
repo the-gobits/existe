@@ -10,7 +10,6 @@ import (
 func TestExiste(t *testing.T) {
 	var v any
 	LoadJson("./data/a.json", &v)
-	t.Log(v)
 
 	type EXTest struct {
 		V        any
@@ -20,6 +19,13 @@ func TestExiste(t *testing.T) {
 
 	tests := []EXTest{
 		{V: v, Key: "algo", Expected: true},
+		{V: v, Key: "algo_random", Expected: false},
+		{V: v, Key: "algo.0", Expected: true},
+		{V: v, Key: "algo.-1", Expected: false},
+		{V: v, Key: "algo.0.metadata", Expected: true},
+		{V: v, Key: "algo.0.falso", Expected: false},
+		{V: EXTest{}, Key: "Expected", Expected: true},
+		{V: EXTest{}, Key: "Falso", Expected: false},
 	}
 
 	for _, test := range tests {
