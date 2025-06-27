@@ -1,3 +1,5 @@
+// Package existe possui uma função [Existe] que verifica a existência de uma
+// dada chave, para tipos complexos com maps, struct e slice.
 package existe
 
 import (
@@ -6,6 +8,8 @@ import (
 	"strings"
 )
 
+// Existe verifica a existência de uma determinada propriedade em tipos
+// complexos com maps, struct, e slice.
 func Existe(v any, key string) bool {
 	keys := strings.Split(key, ".")
 	rv := reflect.ValueOf(v)
