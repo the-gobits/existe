@@ -17,6 +17,10 @@ func TestExiste(t *testing.T) {
 		Key      string
 	}
 
+	type StructWithPtr struct {
+		A *EXTest
+	}
+
 	tests := []EXTest{
 		{V: v, Key: "algo", Expected: true},
 		{V: v, Key: "algo_random", Expected: false},
@@ -26,6 +30,7 @@ func TestExiste(t *testing.T) {
 		{V: v, Key: "algo.0.falso", Expected: false},
 		{V: EXTest{}, Key: "Expected", Expected: true},
 		{V: EXTest{}, Key: "Falso", Expected: false},
+		{V: StructWithPtr{A: &EXTest{}}, Key: "A.V", Expected: true},
 	}
 
 	for _, test := range tests {

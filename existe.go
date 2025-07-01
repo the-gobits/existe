@@ -18,7 +18,7 @@ func Existe(v any, key string) bool {
 		if !rv.IsValid() {
 			return false
 		}
-		if rv.Kind() == reflect.Interface {
+		if kind := rv.Kind(); kind == reflect.Interface || kind == reflect.Ptr {
 			rv = rv.Elem()
 		}
 		switch rv.Kind() {
