@@ -18,12 +18,19 @@ func Existe(v any, key string) bool {
 		if !rv.IsValid() {
 			return false
 		}
-		if kind := rv.Kind(); kind == reflect.Interface || kind == reflect.Ptr {
+
+		for kind := rv.Kind(); kind == reflect.Interface || kind == reflect.Pointer; kind = rv.Kind() {
+			if rv.IsNil() {
+				return false
+			}
 			rv = rv.Elem()
 		}
+
 		switch rv.Kind() {
 		case reflect.Map:
 			rv = rv.MapIndex(reflect.ValueOf(key))
+		case reflect.Array:
+			fallthrough
 		case reflect.Slice:
 			idx, err := strconv.Atoi(key)
 			if err != nil || idx < 0 || idx >= rv.Len() {

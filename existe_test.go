@@ -21,6 +21,12 @@ func TestExiste(t *testing.T) {
 		A *EXTest
 	}
 
+	type StructWithDeepPtr struct {
+		A **EXTest
+	}
+
+	emptyTest := &EXTest{}
+
 	tests := []EXTest{
 		{V: v, Key: "algo", Expected: true},
 		{V: v, Key: "algo_random", Expected: false},
@@ -28,9 +34,10 @@ func TestExiste(t *testing.T) {
 		{V: v, Key: "algo.-1", Expected: false},
 		{V: v, Key: "algo.0.metadata", Expected: true},
 		{V: v, Key: "algo.0.falso", Expected: false},
-		{V: EXTest{}, Key: "Expected", Expected: true},
-		{V: EXTest{}, Key: "Falso", Expected: false},
-		{V: StructWithPtr{A: &EXTest{}}, Key: "A.V", Expected: true},
+		{V: *emptyTest, Key: "Expected", Expected: true},
+		{V: *emptyTest, Key: "Falso", Expected: false},
+		{V: StructWithPtr{A: emptyTest}, Key: "A.V", Expected: true},
+		{V: StructWithDeepPtr{A: &emptyTest}, Key: "A.V", Expected: true},
 	}
 
 	for _, test := range tests {
