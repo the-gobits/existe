@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"strings"
 	"testing"
+	"text/template"
 )
 
 func TestExiste(t *testing.T) {
@@ -52,6 +54,47 @@ func TestExiste(t *testing.T) {
 			t.Logf("Expected %v, but got %v, for Existe(%v, %q)", test.Expected, got, test.V, test.Key)
 			t.Fail()
 		}
+	}
+}
+
+func TestExisteComTemplate(t *testing.T) {
+	type EXTTest struct {
+		V        any
+		Expected string
+		Template string
+	}
+
+	type P struct {
+		AI string
+	}
+
+	type T struct {
+		P *P
+	}
+
+	type A struct {
+		T T
+	}
+
+	tt := []EXTTest{
+		{V: A{T: T{P: &P{AI: "asd"}}}, Expected: "true", Template: `{{ existe . "T.P" }}`},
+		{V: A{T: T{P: &P{AI: "asd"}}}, Expected: "true", Template: `{{ existe . "T.P.AI" }}`},
+		{V: A{T: T{}}, Expected: "false", Template: `{{ existe . "T.P.AI" }}`},
+	}
+
+	for _, ttu := range tt {
+		temp, err := template.New("base").Funcs(template.FuncMap{"existe": Existe}).Parse(ttu.Template)
+		if err != nil {
+			t.Error(err)
+		}
+		sb := &strings.Builder{}
+
+		temp.Execute(sb, ttu.V)
+		if s := sb.String(); s != ttu.Expected {
+			t.Errorf(`Expected %q, but got %q`, ttu.Expected, s)
+			t.Fail()
+		}
+
 	}
 }
 
