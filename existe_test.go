@@ -28,10 +28,14 @@ func TestExiste(t *testing.T) {
 	emptyTest := &EXTest{}
 
 	tests := []EXTest{
+		{V: 1, Key: "algo", Expected: false},
+		{V: "12", Key: "algo", Expected: false},
 		{V: v, Key: "algo", Expected: true},
 		{V: v, Key: "algo_random", Expected: false},
 		{V: v, Key: "algo.0", Expected: true},
 		{V: v, Key: "algo.-1", Expected: false},
+		{V: [3]int{1, 2, 3}, Key: "1", Expected: true},
+		{V: [3]int{1, 2, 3}, Key: "3", Expected: false},
 		{V: v, Key: "algo.0.metadata", Expected: true},
 		{V: v, Key: "algo.0.falso", Expected: false},
 		{V: *emptyTest, Key: "Expected", Expected: true},
