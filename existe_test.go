@@ -41,6 +41,7 @@ func TestExiste(t *testing.T) {
 		{V: *emptyTest, Key: "Expected", Expected: true},
 		{V: *emptyTest, Key: "Falso", Expected: false},
 		{V: StructWithPtr{A: emptyTest}, Key: "A.V", Expected: true},
+		{V: StructWithPtr{A: nil}, Key: "A.V", Expected: false},
 		{V: StructWithDeepPtr{A: &emptyTest}, Key: "A.V", Expected: true},
 	}
 
